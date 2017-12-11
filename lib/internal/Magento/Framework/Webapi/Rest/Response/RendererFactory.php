@@ -71,7 +71,12 @@ class RendererFactory
         if (!is_array($acceptTypes)) {
             $acceptTypes = [$acceptTypes];
         }
+        // For Accept type = '*/*' return default renderer
+        $defaultRenderer = isset($this->_renders['default']) ? $this->_renders['default'] : false;
         foreach ($acceptTypes as $acceptType) {
+            if ($acceptType == '*/*' && $defaultRenderer) {
+                return $defaultRenderer['model'];
+            }
             foreach ($this->_renders as $rendererConfig) {
                 $rendererType = $rendererConfig['type'];
                 if ($acceptType == $rendererType || $acceptType == current(
